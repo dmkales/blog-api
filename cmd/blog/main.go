@@ -31,6 +31,8 @@ func main() {
 	router.HandleFunc("/user", insertUser).Methods("POST")
 	router.HandleFunc("/user/list", getAllUser).Methods("GET")
 	router.HandleFunc("/user/{id}", getUser).Methods("GET")
+	router.HandleFunc("/user/{id}", updateUser).Methods("PUT")
+	router.HandleFunc("/user/{id}", deleteUser).Methods("DELETE")
 
 	headersOk := handlers.AllowedHeaders([]string{"Authorization", "X-Requested-With", "Content-Type"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
@@ -78,6 +80,14 @@ func updateUser(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	if err := dbinterface.Update(db, id, user); err != nil {
+		panic(err)
+	}
+}
+
+func deleteUser(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id := params["id"]
+	if err := dbinterface.Delete(db, id); err != nil {
 		panic(err)
 	}
 }

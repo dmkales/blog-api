@@ -2,6 +2,7 @@ package dbinterface
 
 import (
 	"database/sql"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql" // mysql driver
 )
@@ -51,5 +52,20 @@ func Create(db *sql.DB, user User) error {
 
 // Update : update a single user
 func Update(db *sql.DB, id string, user User) error {
+	t := time.Now()
+	tf := t.Format("2006-01-02 15:04:05")
+	sqlStmt := `UPDATE user SET first_name = ?, last_name = ?, email = ?, updated = ? WHERE user_id = ?`
+	if _, err := db.Exec(sqlStmt, user.FirstName, user.LastName, user.Email, tf, id); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Delete : delete a single user
+func Delete(db *sql.DB, id string) error {
+	sqlStmt := `DELETE FROM user WHERE user_id = ?`
+	if _, err := db.Exec(sqlStmt, id); err != nil {
+		return err
+	}
 	return nil
 }
