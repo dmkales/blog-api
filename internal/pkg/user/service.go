@@ -23,7 +23,7 @@ func GetAllUser(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 func GetUser(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
-		id := params["id"]
+		id := params["user_id"]
 		user, err := Get(db, id)
 		if err != nil {
 			panic(err)
@@ -51,7 +51,7 @@ func UpdateUser(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var user User
 		params := mux.Vars(r)
-		id := params["id"]
+		id := params["user_id"]
 		decoder := json.NewDecoder(r.Body)
 		if err := decoder.Decode(&user); err != nil {
 			panic(err)
@@ -66,7 +66,7 @@ func UpdateUser(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 func DeleteUser(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
-		id := params["id"]
+		id := params["user_id"]
 		if err := Delete(db, id); err != nil {
 			panic(err)
 		}
